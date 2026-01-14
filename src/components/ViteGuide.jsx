@@ -35,10 +35,11 @@ const CodeBlock = ({ code }) => {
   const TOKEN_RE =
     /(\/\/.*$)|(\/(?:\\\/|[^\/\n])+\/[gimsuy]*)|('(?:\\'|[^'\n])*'|"(?:\\"|[^"\n])*")|\b(const|let|var|function|throw|new|return|await|async)\b|\b(expect|toBe\w+|toEqual|toMatch|toContain|toHave\w+|toThrow|vi|render|screen)\b/gm;
 
+  // ✅ Devuelve HTML completo (string) manteniendo indentación (usaremos <pre>)
   const highlightCode = (text) => {
     const escaped = escapeHtml(text);
 
-    const highlighted = escaped.replace(
+    return escaped.replace(
       TOKEN_RE,
       (match, comment, regexLit, strLit, kw, api) => {
         if (comment) return wrap("text-slate-500 italic", match);
@@ -49,20 +50,17 @@ const CodeBlock = ({ code }) => {
         return match;
       }
     );
-
-    return highlighted.split("\n").map((line, i) => (
-      <div
-        key={i}
-        className="leading-6"
-        dangerouslySetInnerHTML={{ __html: line || "&nbsp;" }}
-      />
-    ));
   };
 
   return (
     <div className="relative group mt-4">
-      <div className="bg-[#1a1a1a] rounded-xl p-5 font-mono text-sm overflow-x-auto border border-slate-800 text-slate-300 shadow-inner">
-        {highlightCode(code)}
+      <div className="bg-[#1a1a1a] rounded-xl p-5 overflow-x-auto border border-slate-800 text-slate-300 shadow-inner">
+        {/* ✅ whitespace-pre + text-left para tabulado y alineación */}
+        <pre
+          className="font-mono text-sm leading-6 whitespace-pre text-left"
+          style={{ tabSize: 2 }} // cambia a 4 si quieres
+          dangerouslySetInnerHTML={{ __html: highlightCode(code) }}
+        />
       </div>
 
       <button
@@ -101,7 +99,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("truth");
 
   const category = DATA[activeTab];
-  const CategoryIcon = ICONS[category.icon]; // ✅ resuelve icono desde string
+  const CategoryIcon = ICONS[category.icon];
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
@@ -116,7 +114,8 @@ export default function App() {
             </h1>
           </div>
           <p className="text-slate-400 text-lg max-w-2xl">
-            La guía definitiva de aserciones para componentes React y lógica avanzada.
+            La guía definitiva de aserciones para componentes React y lógica
+            avanzada.
           </p>
         </div>
       </header>
@@ -124,7 +123,7 @@ export default function App() {
       <main className="max-w-5xl mx-auto px-6 -mt-8">
         <div className="flex flex-wrap gap-2 p-2 bg-white rounded-2xl shadow-lg border border-slate-200 mb-10 overflow-x-auto no-scrollbar">
           {Object.entries(DATA).map(([key, value]) => {
-            const TabIcon = ICONS[value.icon]; // ✅ resuelve icono por tab
+            const TabIcon = ICONS[value.icon];
             return (
               <button
                 key={key}
@@ -135,7 +134,6 @@ export default function App() {
                     : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
                 }`}
               >
-                {/* ✅ icono renderizado aquí */}
                 <TabIcon className="w-5 h-5" />
                 {value.title}
               </button>
@@ -147,7 +145,6 @@ export default function App() {
           <div className="animate-in fade-in slide-in-from-top-4 duration-500">
             <h2 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
               <span className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
-                {/* ✅ icono de categoría */}
                 <CategoryIcon className="w-5 h-5" />
               </span>
               {category.title}
@@ -180,8 +177,8 @@ export default function App() {
                 <code className="bg-slate-100 px-1 font-semibold rounded">
                   getByRole
                 </code>{" "}
-                antes que selectores de texto. Ayuda a asegurar que tu UI sea accesible
-                para todos los usuarios.
+                antes que selectores de texto. Ayuda a asegurar que tu UI sea
+                accesible para todos los usuarios.
               </p>
             </div>
 
@@ -195,8 +192,8 @@ export default function App() {
                   vi.clearAllMocks()
                 </code>{" "}
                 en el ciclo{" "}
-                <code className="bg-slate-100 px-1 rounded">afterEach</code> para
-                evitar falsos positivos.
+                <code className="bg-slate-100 px-1 rounded">afterEach</code>{" "}
+                para evitar falsos positivos.
               </p>
             </div>
           </div>
