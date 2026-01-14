@@ -19,17 +19,39 @@ import {
 
 // --- DATA DEFINITION ---
 const DATA = {
-  truth: {
+    truth: {
     title: "Valores de Verdad",
     icon: <ShieldCheck className="w-5 h-5" />,
     desc: "Útiles para comprobar estados de carga o visibilidad de componentes.",
     items: [
-      { name: "toBeDefined()", usage: "Verifica si una variable o prop existe.", code: "const props = { title: 'Mi App' };\nexpect(props.title).toBeDefined();" },
-      { name: "toBeNull()", usage: "Útil cuando un fetch no devuelve datos todavía.", code: "const user = null;\nexpect(user).toBeNull();" },
-      { name: "toBeTruthy()", usage: "Verifica si un valor es 'truthy' (útil para toggles).", code: "const isVisible = true;\nexpect(isVisible).toBeTruthy();" },
-      { name: "not", usage: "Propiedad para negar cualquier matcher.", code: "expect(10).not.toBe(5);\nexpect(null).not.toBeTruthy();" }
+        { 
+        name: "toBeDefined()", 
+        usage: "Verifica si una variable o prop existe.", 
+        code: "const props = { title: 'Mi App' };\nexpect(props.title).toBeDefined();" 
+        },
+        { 
+        name: "toBeNull()", 
+        usage: "Útil cuando un fetch no devuelve datos todavía.", 
+        code: "const user = null;\nexpect(user).toBeNull();" 
+        },
+        { 
+        name: "toBeTruthy()", 
+        usage: "Verifica si un valor es 'truthy' (útil para toggles).", 
+        code: "const isVisible = true;\nexpect(isVisible).toBeTruthy();" 
+        },
+        { 
+        name: "toBeFalsy()", 
+        usage: "Verifica si un valor es 'falsy' (false, 0, '', null, undefined o NaN). Útil para estados apagados o campos vacíos.", 
+        code: "const isOpen = false;\nexpect(isOpen).toBeFalsy();\n\nconst errorMsg = '';\nexpect(errorMsg).toBeFalsy();" 
+        },
+        { 
+        name: "not", 
+        usage: "Propiedad para negar cualquier matcher.", 
+        code: "expect(10).not.toBe(5);\nexpect(null).not.toBeTruthy();" 
+        }
     ]
-  },
+    },
+
   equality: {
     title: "Identidad vs Contenido",
     icon: <Equal className="w-5 h-5" />,
