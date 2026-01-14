@@ -1,5 +1,42 @@
 // src/data/vitestMatchers.data.js
 export const VITEST_MATCHERS = {
+  theory: {
+    title: "Teoría Fundamental",
+    icon: "BookOpen",
+    desc: "Conceptos clave que todo desarrollador debe dominar antes de escribir su primer test.",
+    isTheory: true,
+    items: [
+      {
+        name: "La Pirámide de Testing",
+        usage: "Estrategia de distribución de esfuerzos en pruebas.",
+        content: [
+          { t: "Unitarios (70%)", d: "Prueban funciones o componentes aislados. Rápidos y baratos." },
+          { t: "Integración (20%)", d: "Verifican que varios módulos o componentes trabajen bien juntos." },
+          { t: "E2E / UI (10%)", d: "Prueueban flujos completos (ej: login) de principio a fin." },
+        ],
+      },
+      {
+        name: "Principios F.I.R.S.T.",
+        usage: "Cualidades de un buen test.",
+        content: [
+          { t: "Fast", d: "Deben ejecutarse en segundos." },
+          { t: "Independent", d: "Un test no debe depender del resultado de otro." },
+          { t: "Repeatable", d: "Deben dar el mismo resultado en cualquier entorno." },
+          { t: "Self-validating", d: "Pasan o fallan por sí mismos, sin interpretación manual." },
+          { t: "Thorough", d: "Deben cubrir casos de éxito, error y bordes (edge cases)." },
+        ],
+      },
+      {
+        name: "Patrón AAA (Arrange, Act, Assert)",
+        usage: "Estructura lógica de un caso de prueba.",
+        content: [
+          { t: "Arrange (Preparar)", d: "Configurar el estado, renderizar componente y preparar mocks." },
+          { t: "Act (Actuar)", d: "Ejecutar la acción: un click, escribir en un input o llamar a una función." },
+          { t: "Assert (Afirmar)", d: "Comprobar que el resultado obtenido es el esperado." },
+        ],
+      },
+    ],
+  },
   truth: {
     title: "Valores de Verdad",
     icon: "ShieldCheck",

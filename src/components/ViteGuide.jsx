@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import "./ViteGuide.css";
+import { 
+  Copy, 
+  Check, 
+  Search, 
+  Trash2, 
+  Zap, 
+  Layout, 
+  Info, 
+  BookOpen 
+} from "lucide-react"; 
 
-import { Copy, Check, Search, Trash2, Zap, Layout } from "lucide-react"; // UI icons
+// Nota: He mantenido tus imports originales. 
+// Para que esto funcione, asegúrate de que VITEST_MATCHERS incluya la clave "theory"
+// y que ICONS tenga un icono para "theory" (ej: BookOpen).
 import { VITEST_MATCHERS } from "../data/vitestMatchers.data.js";
 import { ICONS } from "../ui/icons";
-
+import "./ViteGuide.css";
 // --- DATA DEFINITION ---
 const DATA = VITEST_MATCHERS;
 
@@ -35,7 +46,6 @@ const CodeBlock = ({ code }) => {
   const TOKEN_RE =
     /(\/\/.*$)|(\/(?:\\\/|[^\/\n])+\/[gimsuy]*)|('(?:\\'|[^'\n])*'|"(?:\\"|[^"\n])*")|\b(const|let|var|function|throw|new|return|await|async)\b|\b(expect|toBe\w+|toEqual|toMatch|toContain|toHave\w+|toThrow|vi|render|screen)\b/gm;
 
-  // ✅ Devuelve HTML completo (string) manteniendo indentación (usaremos <pre>)
   const highlightCode = (text) => {
     const escaped = escapeHtml(text);
 
@@ -55,10 +65,9 @@ const CodeBlock = ({ code }) => {
   return (
     <div className="relative group mt-4">
       <div className="bg-[#1a1a1a] rounded-xl p-5 overflow-x-auto border border-slate-800 text-slate-300 shadow-inner">
-        {/* ✅ whitespace-pre + text-left para tabulado y alineación */}
         <pre
           className="font-mono text-sm leading-6 whitespace-pre text-left"
-          style={{ tabSize: 2 }} // cambia a 4 si quieres
+          style={{ tabSize: 2 }}
           dangerouslySetInnerHTML={{ __html: highlightCode(code) }}
         />
       </div>
@@ -74,6 +83,25 @@ const CodeBlock = ({ code }) => {
     </div>
   );
 };
+
+// Nuevo componente para la sección teórica
+const TheoryItem = ({ item }) => (
+  <div className="bg-white border-l-4 border-indigo-500 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+    <h3 className="text-xl font-bold text-slate-800 mb-1 flex items-center gap-2">
+      <Info size={18} className="text-indigo-500" />
+      {item.name}
+    </h3>
+    <p className="text-slate-500 text-sm mb-4 italic">{item.usage}</p>
+    <div className="space-y-3">
+      {item.content && item.content.map((c, i) => (
+        <div key={i} className="flex flex-col sm:flex-row gap-1 sm:gap-3 border-b border-slate-50 pb-2 last:border-0">
+          <span className="font-bold text-indigo-600 min-w-[140px] text-sm uppercase tracking-wider">{c.t}</span>
+          <span className="text-slate-600 text-sm leading-relaxed">{c.d}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const MatcherCard = ({ item }) => (
   <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -96,10 +124,11 @@ const MatcherCard = ({ item }) => (
 );
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("truth");
+  // Cambiamos el estado inicial a 'theory' para que sea lo primero que vean los alumnos
+  const [activeTab, setActiveTab] = useState("theory");
 
-  const category = DATA[activeTab];
-  const CategoryIcon = ICONS[category.icon];
+  const category = DATA[activeTab] || DATA[Object.keys(DATA)[0]];
+  const CategoryIcon = ICONS[category.icon] || BookOpen;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
@@ -123,7 +152,7 @@ export default function App() {
       <main className="max-w-5xl mx-auto px-6 -mt-8">
         <div className="flex flex-wrap gap-2 p-2 bg-white rounded-2xl shadow-lg border border-slate-200 mb-10 overflow-x-auto no-scrollbar">
           {Object.entries(DATA).map(([key, value]) => {
-            const TabIcon = ICONS[value.icon];
+            const TabIcon = ICONS[value.icon] || Info;
             return (
               <button
                 key={key}
@@ -154,9 +183,12 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Renderizado condicional según si es Teoría o Matchers */}
+          <div className={category.isTheory ? "space-y-6" : "grid grid-cols-1 lg:grid-cols-2 gap-6"}>
             {category.items.map((item, idx) => (
-              <MatcherCard key={idx} item={item} />
+              category.isTheory 
+                ? <TheoryItem key={idx} item={item} /> 
+                : <MatcherCard key={idx} item={item} />
             ))}
           </div>
         </section>
