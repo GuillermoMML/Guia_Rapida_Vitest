@@ -7,12 +7,11 @@ import {
   Zap, 
   Layout, 
   Info, 
-  BookOpen 
+  Workflow,
+  BookOpen,
+  FlaskConical,
 } from "lucide-react"; 
-
-// Nota: He mantenido tus imports originales. 
-// Para que esto funcione, asegúrate de que VITEST_MATCHERS incluya la clave "theory"
-// y que ICONS tenga un icono para "theory" (ej: BookOpen).
+import TheoryItem from "./TheryItem.jsx";
 import { VITEST_MATCHERS } from "../data/vitestMatchers.data.js";
 import { ICONS } from "../ui/icons";
 import "./ViteGuide.css";
@@ -84,25 +83,6 @@ const CodeBlock = ({ code }) => {
   );
 };
 
-// Nuevo componente para la sección teórica
-const TheoryItem = ({ item }) => (
-  <div className="bg-white border-l-4 border-indigo-500 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-    <h3 className="text-xl font-bold text-slate-800 mb-1 flex items-center gap-2">
-      <Info size={18} className="text-indigo-500" />
-      {item.name}
-    </h3>
-    <p className="text-slate-500 text-sm mb-4 italic">{item.usage}</p>
-    <div className="space-y-3">
-      {item.content && item.content.map((c, i) => (
-        <div key={i} className="flex flex-col sm:flex-row gap-1 sm:gap-3 border-b border-slate-50 pb-2 last:border-0">
-          <span className="font-bold text-indigo-600 min-w-[140px] text-sm uppercase tracking-wider">{c.t}</span>
-          <span className="text-slate-600 text-sm leading-relaxed">{c.d}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
 const MatcherCard = ({ item }) => (
   <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-2 duration-500">
     <div className="flex items-center justify-between mb-3">
@@ -149,7 +129,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 -mt-8">
+      <main className="max-w-7xl mx-auto">
         <div className="flex flex-wrap gap-2 p-2 bg-white rounded-2xl shadow-lg border border-slate-200 mb-10 overflow-x-auto no-scrollbar">
           {Object.entries(DATA).map(([key, value]) => {
             const TabIcon = ICONS[value.icon] || Info;
@@ -193,40 +173,34 @@ export default function App() {
           </div>
         </section>
 
+        {/* SECCIÓN: FLUJO DE TRABAJO */}
         <section className="mt-20 pt-10 border-t border-slate-200">
           <h2 className="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-2">
-            <Search className="text-indigo-500" />
-            Consejos de Arquitectura
+            <Workflow className="text-indigo-500" />
+            Flujo de Trabajo Recomendado
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm">
-              <h3 className="font-bold text-indigo-600 flex items-center gap-2 mb-3">
-                <Layout size={18} /> Prioridad RTL
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Utiliza siempre{" "}
-                <code className="bg-slate-100 px-1 font-semibold rounded">
-                  getByRole
-                </code>{" "}
-                antes que selectores de texto. Ayuda a asegurar que tu UI sea
-                accesible para todos los usuarios.
-              </p>
+          <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 p-10 opacity-10">
+              <FlaskConical size={200} />
             </div>
-
-            <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-sm">
-              <h3 className="font-bold text-emerald-600 flex items-center gap-2 mb-3">
-                <Trash2 size={18} /> Aislamiento de Mocks
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Asegúrate de ejecutar{" "}
-                <code className="bg-slate-100 px-1 font-semibold rounded">
-                  vi.clearAllMocks()
-                </code>{" "}
-                en el ciclo{" "}
-                <code className="bg-slate-100 px-1 rounded">afterEach</code>{" "}
-                para evitar falsos positivos.
-              </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center font-bold text-xl">1</div>
+                <h4 className="text-xl font-bold text-indigo-300">Definir el Escenario</h4>
+                <p className="text-slate-400 text-sm">Antes de tocar el código, piensa: "¿Qué quiero que pase si el usuario hace X?".</p>
+              </div>
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center font-bold text-xl">2</div>
+                <h4 className="text-xl font-bold text-purple-300">Aplicar AAA</h4>
+                <p className="text-slate-400 text-sm">Prepara (Arrange), Actúa (Act) y confirma que todo esté en su sitio (Assert).</p>
+              </div>
+              <div className="space-y-4">
+                <div className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center font-bold text-xl">3</div>
+                <h4 className="text-xl font-bold text-pink-300">Refactorizar</h4>
+                <p className="text-slate-400 text-sm">Mejora tu código real. Si el test sigue en verde, ¡estás a salvo!</p>
+              </div>
             </div>
           </div>
         </section>
